@@ -21,8 +21,11 @@ int volumeInterval = 10;
 int volumeIntervalMinor = 5;
 
 float barWidth = 4;
-
 int displayMode = 4;
+
+float[] tabLeft, tabRight;
+float tabTop, tabBottom;
+float tabPad = 10;
 
 void setup(){
   size(720,405);
@@ -111,6 +114,34 @@ void drawTitle(){
   textAlign(CENTER);
   String title = data.getColumnName(currentColumn);
   text(title, (plotX1+plotX2)/2, plotY1-13);
+}
+
+void drawTitleTabs() {
+  rectMode(CORNERS);
+  noStroke();
+  textSize(20);
+  textAlign(LEFT);
+  
+  if(tabLeft == null){
+    tabLeft = new float[columnCount];
+    tabRight = new float[columnCount];
+  }
+  
+  float runningX = plotX1;
+  tabTop = plotY1 - textAscent() - 15;
+  tabBottom = plotY1;
+  
+  for(int col=0; col<columnCount; col++){
+    String title = data.getColumnName(col);
+    tableLeft[col] = runningX;
+    float titleWidth = textWidth(title);
+    tabRight[col] = tabLeft[col] + tabPad + titleWidth + tabPad;
+    
+    fill(col == currentColumn ? 255 : 224);
+    text(title, runningX + tabPad, plotY1 - 10);
+    
+    runningX = tabRight[col];
+  }
 }
 
 void drawAxisLabels(){
