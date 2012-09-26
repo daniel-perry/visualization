@@ -21,7 +21,7 @@ int volumeInterval = 10;
 int volumeIntervalMinor = 5;
 
 float barWidth = 4;
-int displayMode = 4;
+int displayMode = 3;
 
 float[] tabLeft, tabRight;
 float tabTop, tabBottom;
