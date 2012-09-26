@@ -66,7 +66,8 @@ void draw(){
   rect(plotX1,plotY1, plotX2,plotY2);
  
   // Draw the title of the current plot.
-  drawTitle();
+  //drawTitle();
+  drawTitleTabs();
   drawAxisLabels();
   // Draw axis labels
   drawVolumeLabels();
@@ -133,11 +134,14 @@ void drawTitleTabs() {
   
   for(int col=0; col<columnCount; col++){
     String title = data.getColumnName(col);
-    tableLeft[col] = runningX;
+    tabLeft[col] = runningX;
     float titleWidth = textWidth(title);
     tabRight[col] = tabLeft[col] + tabPad + titleWidth + tabPad;
     
     fill(col == currentColumn ? 255 : 224);
+    rect(tabLeft[col], tabTop, tabRight[col], tabBottom);
+    
+    fill(col == currentColumn ? 0 : 64);
     text(title, runningX + tabPad, plotY1 - 10);
     
     runningX = tabRight[col];
@@ -280,6 +284,7 @@ void drawVolumeLabels(){
   }
 }
 
+/*
 void keyPressed(){
   if( key == '[' ){
     --currentColumn;
@@ -305,4 +310,20 @@ void keyPressed(){
     displayMode = 5;
   }
 }
+*/
 
+void mousePressed(){
+  if( mouseY > tabTop && mouseY < tabBottom){
+    for(int col=0; col<columnCount; col++){
+      if(mouseX > tabLeft[col] && mouseX < tabRight[col]){
+        setColumn(col);
+      }
+    }
+  }
+}
+
+void setColumn(int col){
+  if( col != currentColumn){
+    currentColumn = col;
+  }
+}
