@@ -1,0 +1,3 @@
+what if you showed small multiple scatter plots among all the pairs of variables, and then highlight the ones that are represented by the paralllel coordinates.
+You could also do some simple correlation tests and indicate correlation by color or scale or something, so that pairs that have the highest correlation are more obvious than others..
+
