@@ -17,7 +17,8 @@ def main(argv):
   points = vtk.vtkPoints()
   values = vtk.vtkDoubleArray()
   values.SetNumberOfComponents(1)
-  grid = vtk.vtkUnstructuredGrid()
+  #grid = vtk.vtkUnstructuredGrid()
+  grid = vtk.vtkPolyData()
   for p,d in zip(pts,data):
     p = p[0]
     data = float(d[0])
@@ -30,7 +31,8 @@ def main(argv):
     values.InsertNextValue( data )
   grid.SetPoints(points)
   grid.GetPointData().SetScalars(values)
-  w = vtk.vtkUnstructuredGridWriter()
+  #w = vtk.vtkUnstructuredGridWriter()
+  w = vtk.vtkPolyDataWriter()
   w.SetFileName(out_fn)
   w.SetInput(grid)
   w.Update()
