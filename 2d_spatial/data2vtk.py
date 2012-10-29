@@ -27,8 +27,9 @@ def main(argv):
     for pp in parts:
       if len(pp) > 0:
         point.append(float(pp))
+    point[2] = data
     points.InsertNextPoint( point )
-    values.InsertNextValue( data )
+    #values.InsertNextValue( data )
   grid.SetPoints(points)
   grid.GetPointData().SetScalars(values)
   #w = vtk.vtkUnstructuredGridWriter()
