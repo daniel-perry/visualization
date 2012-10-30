@@ -11,7 +11,6 @@ def main(argv):
   pts_fn = argv[1]
   data_fn = argv[2]
   out_fn = argv[3]
-  
   pts = csv.reader(open(pts_fn,"r"), delimiter='\n')
   data = csv.reader(open(data_fn,"r"), delimiter='\n')
   points = vtk.vtkPoints()
@@ -37,7 +36,6 @@ def main(argv):
   w.SetFileName(out_fn)
   w.SetInput(grid)
   w.Update()
-        
 
 if __name__ == "__main__":
   main(sys.argv)
