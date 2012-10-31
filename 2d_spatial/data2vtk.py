@@ -6,11 +6,14 @@ import sys
 
 def main(argv):
   if len(argv) < 2:
-    print "usage: ",argv[0]," <file.pts> <file.data> <outfile.vtk>"
+    print "usage: ",argv[0]," <file.pts> <file.data> <outfile.vtk> [flat]"
     exit(1)
   pts_fn = argv[1]
   data_fn = argv[2]
   out_fn = argv[3]
+  flat = False
+  if len(argv) > 4:
+    flat = True
   pts = csv.reader(open(pts_fn,"r"), delimiter='\n')
   data = csv.reader(open(data_fn,"r"), delimiter='\n')
   points = vtk.vtkPoints()
@@ -26,11 +29,15 @@ def main(argv):
     for pp in parts:
       if len(pp) > 0:
         point.append(float(pp))
-    point[2] = data
+    if flat:
+      point[2] = 0.0
+      values.InsertNextValue( data )
+    else:
+      point[2] = data
     points.InsertNextPoint( point )
-    #values.InsertNextValue( data )
   grid.SetPoints(points)
-  grid.GetPointData().SetScalars(values)
+  if flat:
+    grid.GetPointData().SetScalars(values)
   #w = vtk.vtkUnstructuredGridWriter()
   w = vtk.vtkPolyDataWriter()
   w.SetFileName(out_fn)
