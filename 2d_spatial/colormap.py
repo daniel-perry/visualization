@@ -4,9 +4,12 @@ import sys
 
 def main(argv):
   if len(argv) < 2:
-    print "usage: ",argv[0]," <data>"
+    print "usage: ",argv[0]," <data> [flat]"
     exit(1)
   data_fn = argv[1]
+  flat = False
+  if len(argv) > 2:
+    flat = True
   
   mapper = vtk.vtkPolyDataMapper()
   if data_fn.find('.vtk') != -1:
@@ -26,11 +29,14 @@ def main(argv):
     trianglize = vtk.vtkImageDataGeometryFilter()
     trianglize.SetInput(data)
     trianglize.Update()
-    warp = vtk.vtkWarpScalar()
-    warp.SetScaleFactor(0.2) # arbitrary choice
-    warp.SetInputConnection(trianglize.GetOutputPort())
-    warp.Update()
-    mapper.SetInputConnection(warp.GetOutputPort())
+    if flat:
+      mapper.SetInputConnection(trianglize.GetOutputPort())
+    else:
+      warp = vtk.vtkWarpScalar()
+      warp.SetScaleFactor(0.2) # "looked the best"
+      warp.SetInputConnection(trianglize.GetOutputPort())
+      warp.Update()
+      mapper.SetInputConnection(warp.GetOutputPort())
   elif data_fn.find('.dcm') != -1:
     reader =vtk.vtkDICOMImageReader()
     reader.SetFileName(data_fn)
@@ -39,11 +45,14 @@ def main(argv):
     trianglize = vtk.vtkImageDataGeometryFilter()
     trianglize.SetInput(data)
     trianglize.Update()
-    warp = vtk.vtkWarpScalar()
-    warp.SetScaleFactor(0.2) # arbitrary choice
-    warp.SetInputConnection(trianglize.GetOutputPort())
-    warp.Update()
-    mapper.SetInputConnection(warp.GetOutputPort())
+    if flat:
+      mapper.SetInputConnection(trianglize.GetOutputPort())
+    else:
+      warp = vtk.vtkWarpScalar()
+      warp.SetScaleFactor(0.2) # "looked the best"
+      warp.SetInputConnection(trianglize.GetOutputPort())
+      warp.Update()
+      mapper.SetInputConnection(warp.GetOutputPort())
   else:
     print "unrecognized data file:",data_fn
     exit(1)

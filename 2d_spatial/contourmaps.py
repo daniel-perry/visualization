@@ -20,19 +20,23 @@ def main(argv):
     reader.Update()
     data = reader.GetOutput()
 
+  ptdata = data.GetPointData()
+  scalars = ptdata.GetScalars()  
+  data_range = scalars.GetValueRange()
+  print "data range:",data_range
   contourer = vtk.vtkContourFilter()
   if data_fn.find('body') != 1:
-    contourer.GenerateValues(10,100,400)
+    contourer.GenerateValues(10,data_range[0],data_range[1])
   elif data_fn.find('brain') != 1:
-    contourer.GenerateValues(10,100,400)
+    contourer.GenerateValues(10,data_range[0],data_range[1])
   elif data_fn.find('artichoke') != 1:
-    contourer.GenerateValues(10,100,400)
+    contourer.GenerateValues(10,data_range[0],data_range[1])
   elif data_fn.find('watermelon') != 1:
-    contourer.GenerateValues(10,100,400)
+    contourer.GenerateValues(10,data_range[0],data_range[1])
   else:
-    contourer.GenerateValues(10,100,400)
+    contourer.GenerateValues(10,data_range[0],data_range[1])
     #contourer.SetNumberOfContours(3)
-    #contourer.SetValue(0, 200)
+    #contourer.SetValue(0, 100)
     #contourer.SetValue(1, 300)
     #contourer.SetValue(2, 400)
   contourer.SetInput(data)
