@@ -31,14 +31,13 @@ def main(argv):
         point.append(float(pp))
     if flat:
       point[2] = 0.0
-      values.InsertNextValue( data )
     else:
       point[2] = data
     points.InsertNextPoint( point )
+    values.InsertNextValue( data )
   grid.SetPoints(points)
-  if flat:
-    grid.GetPointData().SetScalars(values)
-  #w = vtk.vtkUnstructuredGridWriter()
+  grid.GetPointData().SetScalars(values)
+  w = vtk.vtkUnstructuredGridWriter()
   w = vtk.vtkPolyDataWriter()
   w.SetFileName(out_fn)
   w.SetInput(grid)

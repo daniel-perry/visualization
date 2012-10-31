@@ -26,44 +26,58 @@ def main(argv):
     reader.SetFileName(data_fn)
     reader.Update()
     data = reader.GetOutput()
-    trianglize = vtk.vtkImageDataGeometryFilter()
-    trianglize.SetInput(data)
-    trianglize.Update()
+    geometry = vtk.vtkImageDataGeometryFilter()
+    geometry.SetInputConnection(reader.GetOutputPort())
+    geometry.Update()
     if flat:
-      mapper.SetInputConnection(trianglize.GetOutputPort())
+      merge = vtk.vtkMergeFilter()
+      merge.SetGeometry(geometry.GetOutput())
+      merge.SetScalars(data)
+      mapper.SetInputConnection(merge.GetOutputPort())
     else:
       warp = vtk.vtkWarpScalar()
-      warp.SetScaleFactor(0.2) # "looked the best"
-      warp.SetInputConnection(trianglize.GetOutputPort())
+      warp.SetInputConnection(geometry.GetOutputPort())
+      warp.SetScaleFactor(0.3) # looked good
       warp.Update()
-      mapper.SetInputConnection(warp.GetOutputPort())
+      merge = vtk.vtkMergeFilter()
+      merge.SetGeometry(warp.GetOutput())
+      merge.SetScalars(data)
+      mapper.SetInputConnection(merge.GetOutputPort())
   elif data_fn.find('.dcm') != -1:
     reader =vtk.vtkDICOMImageReader()
     reader.SetFileName(data_fn)
     reader.Update()
     data = reader.GetOutput()
-    trianglize = vtk.vtkImageDataGeometryFilter()
-    trianglize.SetInput(data)
-    trianglize.Update()
+    geometry = vtk.vtkImageDataGeometryFilter()
+    geometry.SetInput(data)
+    geometry.Update()
     if flat:
-      mapper.SetInputConnection(trianglize.GetOutputPort())
+      mapper.SetInputConnection(geometry.GetOutputPort())
     else:
       warp = vtk.vtkWarpScalar()
-      warp.SetScaleFactor(0.2) # "looked the best"
-      warp.SetInputConnection(trianglize.GetOutputPort())
+      warp.SetInputConnection(geometry.GetOutputPort())
       warp.Update()
       mapper.SetInputConnection(warp.GetOutputPort())
   else:
     print "unrecognized data file:",data_fn
     exit(1)
   
+  lut = vtk.vtkLookupTable()
+  lut.SetNumberOfColors(10)
+  lut.SetHueRange(0.5,0.3)
+  lut.SetSaturationRange(0.6,0.5)
+  lut.SetValueRange(1.0,0.5)
+  lut.Build()
+
+  mapper.ImmediateModeRenderingOff()
+  mapper.SetLookupTable(lut)
  
   actor = vtk.vtkActor()
   actor.SetMapper(mapper)
   
   renderer = vtk.vtkRenderer()
   renderWindow = vtk.vtkRenderWindow()
-  renderWindow.SetSize(400,300)
+  renderWindow.SetSize(700,700)
   renderWindow.AddRenderer(renderer)
  
   renderer.AddActor(actor)
