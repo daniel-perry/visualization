@@ -27,7 +27,7 @@ def main(argv):
   volumeProperty.SetColor(colorFunction)
   volumeProperty.SetScalarOpacity(opacityFunction)
   # composite function (using ray tracing)
-  compositeFunction = vtk.vtkVolumeRayCastCompositeFunction()
+  compositeFunction = vtk.vtkVolumeRayCastMIPFunction()
   volumeMapper = vtk.vtkVolumeRayCastMapper()
   volumeMapper.SetVolumeRayCastFunction(compositeFunction)
   volumeMapper.SetInput(data)
