@@ -40,7 +40,7 @@ def main(argv):
     trianglize.SetInput(data)
     trianglize.Update()
     warp = vtk.vtkWarpScalar()
-    warp.SetScaleFactor(0.2) # arbitrary choice
+    #warp.SetScaleFactor(0.2) # arbitrary choice
     warp.SetInputConnection(trianglize.GetOutputPort())
     warp.Update()
     mapper.SetInputConnection(warp.GetOutputPort())
@@ -54,8 +54,9 @@ def main(argv):
   
   renderer = vtk.vtkRenderer()
   renderWindow = vtk.vtkRenderWindow()
-  renderWindow.SetSize(400,300)
+  renderWindow.SetSize(700,700)
   renderWindow.AddRenderer(renderer)
+  renderWindow.SetWindowName("heightfield")
  
   renderer.AddActor(actor)
   renderer.SetBackground(0.4,0.3,0.2)

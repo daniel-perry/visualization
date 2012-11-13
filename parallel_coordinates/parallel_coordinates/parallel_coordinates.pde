@@ -38,8 +38,9 @@ int sumthing(int n){
 }
 
 void setup(){
-  size(1320,605);
-  data_fn = "cars.tsv";
+  size(1820,1005);
+  //data_fn = "cars.tsv";
+  data_fn = "cameras.tsv";
   data = new FloatTable(data_fn);
   columnCount = data.getColumnCount();
   rowCount = data.getRowCount();
@@ -214,7 +215,7 @@ void drawScatterPlot( float topLeft_x, float topLeft_y, float bottomRight_x, flo
   // check if mouse is over this region..
   if(topLeft_x <= mouseX && mouseX <= bottomRight_x && topLeft_y <= mouseY && mouseY <= bottomRight_y){
     // decide if it's over the top or bottom variable..
-    float halfway = bottomRight_y + (topLeft_y-bottomRight_y)/2;
+    float halfway = bottomRight_y + (bottomRight_y-topLeft_y)/2;
     if(mouseY > halfway){
       overRegion = param2;
     }else{
@@ -385,14 +386,18 @@ void mousePressed(){
 }
 
 
-void mouseRelease(){
+void mouseReleased(){
   int targetRegion = overRegion;
   if( targetRegion >= 0){
+    int firsti = -1;
+    int secondi = -1;
     for(int i=0; i<paramOrdering.length; ++i){
-      if( paramOrdering[i] == targetRegion ){
+      if( i!= secondi && paramOrdering[i] == targetRegion ){
+        firsti = i;
         paramOrdering[i] = draggingRegion;
       }
-      if( paramOrdering[i] == draggingRegion ){
+      if( i != firsti && paramOrdering[i] == draggingRegion ){
+        secondi = i;
         paramOrdering[i] = targetRegion;
       }
     }

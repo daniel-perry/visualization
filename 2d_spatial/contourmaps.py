@@ -25,14 +25,16 @@ def main(argv):
   data_range = scalars.GetValueRange()
   print "data range:",data_range
   contourer = vtk.vtkContourFilter()
-  if data_fn.find('body') != 1:
+  if data_fn.find('body') != -1:
     contourer.GenerateValues(10,data_range[0],data_range[1])
-  elif data_fn.find('brain') != 1:
+    #contourer.GenerateValues(5,data_range[0],data_range[1])
+  elif data_fn.find('brain') != -1:
     contourer.GenerateValues(10,data_range[0],data_range[1])
-  elif data_fn.find('artichoke') != 1:
-    contourer.GenerateValues(10,data_range[0],data_range[1])
-  elif data_fn.find('watermelon') != 1:
-    contourer.GenerateValues(10,data_range[0],data_range[1])
+  elif data_fn.find('artichoke') != -1:
+    contourer.GenerateValues(50,data_range[0],data_range[1])
+  elif data_fn.find('watermelon') != -1:
+    contourer.GenerateValues(20,data_range[0],data_range[1])
+    #contourer.GenerateValues(5,data_range[0],data_range[1])
   else:
     contourer.GenerateValues(10,data_range[0],data_range[1])
     #contourer.SetNumberOfContours(3)
@@ -50,7 +52,7 @@ def main(argv):
   
   renderer = vtk.vtkRenderer()
   renderWindow = vtk.vtkRenderWindow()
-  renderWindow.SetSize(400,300)
+  renderWindow.SetSize(700,700)
   renderWindow.AddRenderer(renderer)
  
   renderer.AddActor(actor)
